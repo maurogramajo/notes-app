@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { createNote } from '../../slices';
 import {
   AppBar,
   Typography,
@@ -17,7 +18,7 @@ function Navbar() {
         <Typography variant="h3" sx={{ flexGrow: 1 }}>
           My Notes
         </Typography>
-        <Button color="inherit" onClick={dispatch({type: 'CREATE_NOTE'})}>Create Note</Button>
+        <Button color="inherit" onClick={() => dispatch(createNote())}>Create Note</Button>
         <Button color="inherit">Archived Notes</Button>
       </Toolbar>
     </AppBar>
