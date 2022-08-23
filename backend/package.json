@@ -1,0 +1,16 @@
+{
+  "name": "notes-api",
+  "version": "1.0.0",
+  "description": "Servidor de Notes APP",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "api",
+    "notes",
+    "node"
+  ],
+  "author": "Mauro Gramajo",
+  "license": "ISC"
+}
