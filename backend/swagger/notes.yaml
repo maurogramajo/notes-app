@@ -1,0 +1,70 @@
+paths:
+  /notes:
+    get:
+      tags:
+      - Notes
+      summary: looks up notes
+      description: returns all unarchived notes
+      operationId: getNotes
+      x-swagger-router-controller: universal.search
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/definitions/note'
+    put:
+      tags:
+      - Notes
+      summary: adds a note item
+      description: Adds an item to the system
+      operationId: createNote
+      x-swagger-router-controller: universal.insert
+      parameters:
+      - name: modeldata
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/noteItem'
+      responses:
+        "201":
+          description: note created
+        "400":
+          description: invalid input, object invalid
+        "409":
+          description: an existing item already exists
+
+definitions:
+  noteItem:
+    x-swagger-model-version: 3
+    required:
+    - title
+    - content
+    type: object
+    properties:
+      title:
+        type: string
+        example: Lista Negra
+      content:
+        type: string
+        example: Lord Valdomero
+
+  note:
+    type: object
+    properties:
+      title:
+        type: string
+      content:
+        type: string
+  #   categoryId:
+  #     type: string
+  #     format: mongoId
+      archived:
+        type: bool
+      edited:
+        type: string
+        format: date-time
+

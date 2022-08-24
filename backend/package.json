@@ -12,5 +12,9 @@
     "node"
   ],
   "author": "Mauro Gramajo",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.19",
+    "universal-pattern": "^1.0.30"
+  }
 }

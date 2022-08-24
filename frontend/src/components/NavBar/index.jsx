@@ -1,6 +1,5 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { createNote } from '../../slices';
+import React, { useState } from 'react';
+
 import {
   AppBar,
   Typography,
@@ -8,9 +7,18 @@ import {
   Button,
 } from '@mui/material';
 
-function Navbar() {
+import CreateUpdateDialog from '../CreateUpdateDialog';
 
-  const dispatch = useDispatch();
+function Navbar() {
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const closeDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleCreate = () => {
+    setOpenDialog(true);
+  };
 
   return (
     <AppBar position="sticky">
@@ -18,9 +26,15 @@ function Navbar() {
         <Typography variant="h3" sx={{ flexGrow: 1 }}>
           My Notes
         </Typography>
-        <Button color="inherit" onClick={() => dispatch(createNote())}>Create Note</Button>
+        <Button color="inherit" onClick={handleCreate}>Create Note</Button>
         <Button color="inherit">Archived Notes</Button>
       </Toolbar>
+      <CreateUpdateDialog
+        title="Create Note"
+        aceptLabel="Create"
+        openDialog={openDialog}
+        closeDialog={closeDialog}
+      />
     </AppBar>
   );
 }

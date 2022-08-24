@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const URLNOTES = 'http://localhost:3001/core/notes';
+
 const initialState = {
   notes: [],
   selectedNote: '',
@@ -10,19 +12,30 @@ export const noteSlice = createSlice({
   initialState,
   reducers: {
     refreshNotes: (state) => {
-      console.info('Refreshing notes...');
+      fetch(URLNOTES, { method: 'GET' }).then((res) => res.json()).then((data) => state.notes.push(data));
+      console.info('Refreshing notes...', state.notes);
     },
-    createNote: (state) => {
-      console.info('Creating note...');
+    createNote: (state, action) => {
+      console.info('Creating note...', action);
     },
     updateNote: (state) => {
-      console.info('Updating note...');
+      console.info('Updating note...', state);
     },
     deleteNote: (state) => {
-      console.info('Deleting note...');
+      console.info('Deleting note...', state);
+    },
+    archiveNote: (state) => {
+      console.info('Archiving note...', state);
     },
   },
 });
 
-export const { refreshNotes, createNote, updateNote, deleteNote } = noteSlice.actions;
-export default noteSlice.reducer
+export const {
+  refreshNotes,
+  createNote,
+  updateNote,
+  deleteNote,
+  archiveNote,
+} = noteSlice.actions;
+export const selectNotes = (state) => state.notes.notes;
+export default noteSlice.reducer;

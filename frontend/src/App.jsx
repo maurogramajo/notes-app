@@ -5,11 +5,13 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 
 import NavBar from './components/NavBar';
+import NotesGrid from './components/NotesGrid';
 
 function NotesApp() {
   return (
     <div>
       <NavBar />
+      <NotesGrid />
     </div>
 
   );
