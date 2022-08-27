@@ -9,7 +9,6 @@ function notesHooks(up) {
 
   up.addHook('/notes', 'beforeInsert', async (req, dataDocument) => {
     dataDocument.archived = false;
-    dataDocument.edited = new Date().toISOString();
     return dataDocument;
   });
 }

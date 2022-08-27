@@ -16,7 +16,12 @@ export const noteSlice = createSlice({
       console.info('Refreshing notes...', state.notes);
     },
     createNote: (state, action) => {
-      console.info('Creating note...', action);
+      let added;
+      fetch(URLNOTES, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: action.payload.title, content: action.payload.content }),
+      }).then((res) => res.json()).then((data) => added=data);
     },
     updateNote: (state) => {
       console.info('Updating note...', state);

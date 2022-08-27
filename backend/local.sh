@@ -4,4 +4,4 @@ export HOST=localhost
 export MONGODBURI=mongodb://127.0.0.1/
 export MONGODBDATABASE=notesdb
 export DEBUG=*
-nodemon app
+node app

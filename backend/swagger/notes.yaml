@@ -63,8 +63,5 @@ definitions:
   #     type: string
   #     format: mongoId
       archived:
-        type: bool
-      edited:
-        type: string
-        format: date-time
+        type: boolean
 

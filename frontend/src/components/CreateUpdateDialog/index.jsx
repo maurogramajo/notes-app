@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 
 import { useDispatch } from 'react-redux';
-import { refreshNotes, createNote } from '../../slices';
+import { createNote } from '../../slices';
 
 function CreateUpdateDialog({
   openDialog,
@@ -24,7 +24,7 @@ function CreateUpdateDialog({
 
   const handleAcept = () => {
     dispatch(createNote({ title: noteTitle, content: noteContent }));
-    dispatch(refreshNotes());
+    closeDialog(false);
   };
 
   useEffect(() => {
