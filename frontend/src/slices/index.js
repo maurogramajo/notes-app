@@ -1,27 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const URLNOTES = 'http://localhost:3001/core/notes';
 
 const initialState = {
+  loading: false,
+  error: '',
   notes: [],
   selectedNote: '',
 };
+
+export const getNotes = createAsyncThunk('notes/getNotes', async () => {
+  const data = await fetch(URLNOTES, { method: 'GET' }).then((res) => res.json());
+  return data;
+});
+
+/*
+const putNote = createAsyncThunk('notes/putNote', () => {
+  fetch(URLNOTES, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: action.payload.title, content: action.payload.content }),
+  }).then((res) => res.json());
+});
+*/
 
 export const noteSlice = createSlice({
   name: 'notes',
   initialState,
   reducers: {
     refreshNotes: (state) => {
-      fetch(URLNOTES, { method: 'GET' }).then((res) => res.json()).then((data) => state.notes.push(data));
-      console.info('Refreshing notes...', state.notes);
+      console.info('Refreshing notes...', state);
     },
-    createNote: (state, action) => {
-      let added;
-      fetch(URLNOTES, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: action.payload.title, content: action.payload.content }),
-      }).then((res) => res.json()).then((data) => added=data);
+    createNote: (state) => {
+      console.info('Creating notes...', state);
     },
     updateNote: (state) => {
       console.info('Updating note...', state);
@@ -32,6 +43,30 @@ export const noteSlice = createSlice({
     archiveNote: (state) => {
       console.info('Archiving note...', state);
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getNotes.pending, (state) => (
+      {
+        ...state,
+        loading: true,
+      }
+    ));
+    builder.addCase(getNotes.fulfilled, (state, action) => (
+      {
+        ...state,
+        loading: false,
+        notes: action.payload,
+        error: '',
+      }
+    ));
+    builder.addCase(getNotes.rejected, (state, action) => (
+      {
+        ...state,
+        loading: false,
+        notes: [],
+        error: action.error.message,
+      }
+    ));
   },
 });
 

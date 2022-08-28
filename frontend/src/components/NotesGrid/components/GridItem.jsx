@@ -15,22 +15,16 @@ import {
   // UnarchiveOutlined,
 } from '@mui/icons-material';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import {
-  selectNotes,
-  // refreshNotes,
   deleteNote,
   updateNote,
   archiveNote,
 } from '../../../slices';
 
-function GridItem() {
+function GridItem({ notes }) {
   const dispatch = useDispatch();
-  // dispatch(refreshNotes());
-  const notes = useSelector(selectNotes);
-  console.info(notes);
-
   return (
     <>
       {notes.map((note) => (
@@ -40,7 +34,7 @@ function GridItem() {
               <Typography variant="h5">{note.title}</Typography>
               <Typography sx={{ mt: 1.5, mb: 1.5, fontSize: 16 }} variant="body2">{note.content}</Typography>
               <Typography variant="body3" color="text.secondary">
-                {`Last edited: ${note.edited.substring(0, 10)}`}
+                {note.edited ? `Last edited: ${note.edited.substring(0, 10)}` : `Created: ${note.added.substring(0, 10)}`}
               </Typography>
             </CardContent>
             <CardActions>
