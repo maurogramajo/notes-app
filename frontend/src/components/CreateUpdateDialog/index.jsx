@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 
 import { useDispatch } from 'react-redux';
-import { createNote } from '../../slices';
+import { putNote, patchNote } from '../../slices';
 
 function CreateUpdateDialog({
   openDialog,
@@ -22,9 +22,20 @@ function CreateUpdateDialog({
   const [noteTitle, setNoteTitle] = useState('');
   const [noteContent, setNoteContent] = useState('');
 
+  const handleClose = () => {
+    setNoteTitle('');
+    setNoteContent('');
+    closeDialog();
+  };
+
   const handleAcept = () => {
-    dispatch(createNote({ title: noteTitle, content: noteContent }));
-    closeDialog(false);
+    if (!inputContent) {
+      dispatch(putNote({ title: noteTitle, content: noteContent }));
+    } else {
+      dispatch(patchNote({ _id: inputContent._id, title: noteTitle, content: noteContent }));
+    }
+
+    handleClose();
   };
 
   useEffect(() => {
@@ -36,7 +47,7 @@ function CreateUpdateDialog({
 
   return (
     <div>
-      <Dialog open={openDialog} onClose={closeDialog}>
+      <Dialog open={openDialog} onClose={handleClose}>
         <DialogTitle>
           {title}
         </DialogTitle>
@@ -66,7 +77,7 @@ function CreateUpdateDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog}>Cancel</Button>
+          <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleAcept}>
             {aceptLabel}
           </Button>

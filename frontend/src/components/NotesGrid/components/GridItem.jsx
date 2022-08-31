@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Grid,
   Card,
@@ -19,12 +19,24 @@ import { useDispatch } from 'react-redux';
 
 import {
   deleteNote,
-  updateNote,
   archiveNote,
 } from '../../../slices';
+import CreateUpdateDialog from '../../CreateUpdateDialog';
 
 function GridItem({ notes }) {
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedNote, setSelectedNote] = useState(false);
   const dispatch = useDispatch();
+
+  const closeDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleUpdate = (note) => {
+    setSelectedNote(note);
+    setOpenDialog(true);
+  };
+
   return (
     <>
       {notes.map((note) => (
@@ -34,19 +46,26 @@ function GridItem({ notes }) {
               <Typography variant="h5">{note.title}</Typography>
               <Typography sx={{ mt: 1.5, mb: 1.5, fontSize: 16 }} variant="body2">{note.content}</Typography>
               <Typography variant="body3" color="text.secondary">
-                {note.edited ? `Last edited: ${note.edited.substring(0, 10)}` : `Created: ${note.added.substring(0, 10)}`}
+                {note.updated ? `Last edited: ${note.updated.substring(0, 10)}` : `Created: ${note.added.substring(0, 10)}`}
               </Typography>
             </CardContent>
             <CardActions>
               <Button onClick={() => dispatch(archiveNote())}>
                 <ArchiveOutlined />
               </Button>
-              <Button onClick={() => dispatch(updateNote())}><EditOutlined /></Button>
+              <Button onClick={() => handleUpdate(note)}><EditOutlined /></Button>
               <Button onClick={() => dispatch(deleteNote())}><DeleteForeverOutlined /></Button>
             </CardActions>
           </Card>
         </Grid>
       ))}
+      <CreateUpdateDialog
+        title="Update Note"
+        aceptLabel="Update"
+        openDialog={openDialog}
+        closeDialog={closeDialog}
+        inputContent={selectedNote}
+      />
     </>
 
   );

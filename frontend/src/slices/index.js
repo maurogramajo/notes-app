@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
-const URLNOTES = 'http://localhost:3001/core/notes';
+import { sendGetNote, sendPutNote, sendPatchNote } from '../apiConections';
 
 const initialState = {
   loading: false,
@@ -9,34 +8,16 @@ const initialState = {
   selectedNote: '',
 };
 
-export const getNotes = createAsyncThunk('notes/getNotes', async () => {
-  const data = await fetch(URLNOTES, { method: 'GET' }).then((res) => res.json());
-  return data;
-});
+export const getNotes = createAsyncThunk('notes/getNotes', sendGetNote);
 
-/*
-const putNote = createAsyncThunk('notes/putNote', () => {
-  fetch(URLNOTES, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title: action.payload.title, content: action.payload.content }),
-  }).then((res) => res.json());
-});
-*/
+export const putNote = createAsyncThunk('notes/putNote', (payload) => sendPutNote(payload));
+
+export const patchNote = createAsyncThunk('notes/patchNote', (payload) => sendPatchNote(payload));
 
 export const noteSlice = createSlice({
   name: 'notes',
   initialState,
   reducers: {
-    refreshNotes: (state) => {
-      console.info('Refreshing notes...', state);
-    },
-    createNote: (state) => {
-      console.info('Creating notes...', state);
-    },
-    updateNote: (state) => {
-      console.info('Updating note...', state);
-    },
     deleteNote: (state) => {
       console.info('Deleting note...', state);
     },
@@ -45,6 +26,7 @@ export const noteSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // GET states
     builder.addCase(getNotes.pending, (state) => (
       {
         ...state,
@@ -63,7 +45,52 @@ export const noteSlice = createSlice({
       {
         ...state,
         loading: false,
-        notes: [],
+        error: action.error.message,
+      }
+    ));
+    // PUT states
+    builder.addCase(putNote.pending, (state) => (
+      {
+        ...state,
+        loading: true,
+      }
+    ));
+    builder.addCase(putNote.fulfilled, (state) => {
+      getNotes();
+      return ({
+        ...state,
+        loading: false,
+        // notes: [...state.notes, action.payload],
+        error: '',
+      });
+    });
+    builder.addCase(putNote.rejected, (state, action) => (
+      {
+        ...state,
+        loading: false,
+        error: action.error.message,
+      }
+    ));
+    // PATCH states
+    builder.addCase(patchNote.pending, (state) => (
+      {
+        ...state,
+        loading: true,
+      }
+    ));
+    builder.addCase(patchNote.fulfilled, (state) => {
+      getNotes();
+      return ({
+        ...state,
+        loading: false,
+        // notes: [...state.notes, action.payload],
+        error: '',
+      });
+    });
+    builder.addCase(patchNote.rejected, (state, action) => (
+      {
+        ...state,
+        loading: false,
         error: action.error.message,
       }
     ));
@@ -71,9 +98,6 @@ export const noteSlice = createSlice({
 });
 
 export const {
-  refreshNotes,
-  createNote,
-  updateNote,
   deleteNote,
   archiveNote,
 } = noteSlice.actions;

@@ -36,6 +36,23 @@ paths:
           description: invalid input, object invalid
         "409":
           description: an existing item already exists
+    patch:
+      tags:
+      - Notes
+      summary: updates a note item
+      operationId: updateNote
+      x-swagger-router-controller: universal.update
+      parameters:
+      - name: modeldata
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/updateItem'
+      responses:
+        "204":
+          description: note updated
+        "400":
+          description: invalid input, object invalid
 
 definitions:
   noteItem:
@@ -51,6 +68,22 @@ definitions:
       content:
         type: string
         example: Lord Valdomero
+
+  updateItem:
+    x-swagger-model-version: 3
+    required:
+    - _id
+    - title
+    - content
+    type: object
+    properties:
+      _id:
+        type: string
+        format: mongoId
+      title:
+        type: string
+      content:
+        type: string
 
   note:
     type: object

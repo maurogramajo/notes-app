@@ -1,17 +1,27 @@
-const url = 'http://localhost:3001/notes';
+const url = 'http://localhost:3001/core/notes';
 
-export const sendGetNote = () => {
-  fetch(url, {
-    method: 'GET',
-    // headers: { 'Content-Type': 'application/json' },
-    // body: JSON.stringify({ title, content, categoryId: selectedCategory._id }),
-  }).then((res) => res.json()).then(() => refreshNotes());
+export const sendGetNote = async () => {
+  console.info('GETTING...');
+  const data = await fetch(url, { method: 'GET' }).then((res) => res.json());
+  return data;
 };
 
-export const sendCreateNote = () => {
-  fetch(url, {
-    method: 'POST',
+export const sendPutNote = async (payload) => {
+  console.info('CREATING...', payload);
+  const data = await fetch(url, {
+    method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title, content, categoryId: selectedCategory._id }),
-  }).then((res) => res.json()).then(() => refreshNotes());
+    body: JSON.stringify(payload),
+  }).then((res) => res.json());
+  return data;
+};
+
+export const sendPatchNote = async (payload) => {
+  console.info('UPDATING...', payload);
+  const data = await fetch(url, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  }).then((res) => res.json());
+  return data;
 };

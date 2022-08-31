@@ -1,13 +1,19 @@
 import React from 'react';
 
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 
 import { store } from './store';
 
 import NavBar from './components/NavBar';
 import NotesGrid from './components/NotesGrid';
 
+import { getNotes } from './slices';
+
 function NotesApp() {
+  const dispatch = useDispatch();
+
+  dispatch(getNotes());
+
   return (
     <div>
       <NavBar />
